@@ -88,7 +88,7 @@ export default function Detection({ persistentState, setPersistentState }) {
 
   return (
     <PageWrapper>
-      <div className="flex flex-col items-center space-y-[var(--section-gap)] pb-[var(--s-3xl)]">
+      <div className="flex flex-col items-center space-y-[var(--s-2xl)] pb-[var(--s-3xl)]">
         <ShipDetailPanel ship={selectedShip} onClose={() => setSelectedShip(null)} />
 
         {/* Hidden File Input */}
@@ -106,15 +106,15 @@ export default function Detection({ persistentState, setPersistentState }) {
         />
 
         {/* Header */}
-        <motion.div className="text-left mt-10 px-2 w-full" {...fadeUp()}>
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[var(--c-accent)]/10 border border-[var(--c-accent)]/20 mb-6">
+        <motion.div className="text-left mt-4 px-2 w-full" {...fadeUp()}>
+          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[var(--c-accent)]/10 border border-[var(--c-accent)]/20 mb-8">
             <Sparkles size={14} className="text-[var(--c-accent)]" />
             <span className="text-[10px] font-black text-[var(--c-accent)] tracking-[0.3em] uppercase">Enterprise Detection Engine</span>
           </div>
-          <h1 className="page-title mb-4">
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight">
             Vessel <span className="text-gradient">Identification</span>
           </h1>
-          <p className="text-[var(--c-text-dim)] text-lg max-w-2xl leading-relaxed font-medium opacity-70">
+          <p className="text-[var(--c-text-dim)] text-lg md:text-xl max-w-2xl leading-relaxed font-medium opacity-70">
             Analyze high-resolution maritime imagery using our neural radar intelligence pipeline.
           </p>
         </motion.div>
@@ -125,7 +125,7 @@ export default function Detection({ persistentState, setPersistentState }) {
         <motion.div {...fadeUp(0.1)} className="w-full">
           <div
             className={`
-              relative w-full aspect-video md:aspect-[21/9] rounded-[40px] border-2 border-dashed transition-all duration-700 group cursor-pointer overflow-hidden
+              relative w-full aspect-video md:aspect-[21/9] rounded-[var(--card-radius)] border-2 border-dashed transition-all duration-700 group cursor-pointer overflow-hidden
               ${dragOver ? 'border-[var(--c-accent)] bg-[var(--c-accent)]/10 scale-[0.99]' : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20'}
               ${preview ? 'border-solid border-white/5 bg-transparent' : ''}
             `}
@@ -135,33 +135,33 @@ export default function Detection({ persistentState, setPersistentState }) {
             onClick={() => inputRef.current?.click()}
           >
             {preview ? (
-              <div className="p-8 w-full h-full flex flex-col items-center justify-center">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.01] transition-transform duration-500">
+              <div className="p-12 w-full h-full flex flex-col items-center justify-center">
+                <div className="relative rounded-[var(--card-radius)] overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.01] transition-transform duration-500">
                   <img src={preview} alt="Preview" className="max-h-[500px] object-contain" />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                     <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white border border-white/20">
-                        <Upload size={32} />
+                      <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-white border border-white/20 shadow-2xl backdrop-blur-md">
+                        <Upload size={36} />
                       </div>
-                      <p className="text-xs font-black uppercase tracking-[0.3em] text-white">Replace Imagery</p>
+                      <p className="text-sm font-black uppercase tracking-[0.35em] text-white">Replace Imagery</p>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <div className="w-24 h-24 rounded-[32px] bg-white/[0.03] border border-white/5 flex items-center justify-center text-[var(--c-text-dim)] mb-8 group-hover:scale-110 group-hover:text-[var(--c-accent)] group-hover:border-[var(--c-accent)]/20 transition-all duration-500 shadow-2xl">
-                  <Upload size={40} className="group-hover:translate-y-[-4px] transition-transform" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
+                <div className="w-28 h-28 rounded-[36px] bg-white/[0.03] border border-white/5 flex items-center justify-center text-[var(--c-text-dim)] mb-10 group-hover:scale-110 group-hover:text-[var(--c-accent)] group-hover:border-[var(--c-accent)]/20 transition-all duration-500 shadow-2xl">
+                  <Upload size={44} className="group-hover:translate-y-[-6px] transition-transform" />
                 </div>
-                <h3 className="text-xl font-black text-white uppercase tracking-[0.2em] mb-4">
+                <h3 className="text-2xl font-black text-white uppercase tracking-[0.25em] mb-5">
                   Deploy Satellite Imagery
                 </h3>
-                <p className="text-[var(--c-text-dim)] text-xs font-bold uppercase tracking-[0.3em] opacity-40 group-hover:opacity-80 transition-opacity">
+                <p className="text-[var(--c-text-dim)] text-sm font-bold uppercase tracking-[0.35em] opacity-40 group-hover:opacity-80 transition-opacity">
                   Drag and drop file or click to browse telemetry
                 </p>
-                <div className="mt-10 flex items-center gap-6">
-                  <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-[var(--c-text-dim)]">PNG / JPEG / TIFF</div>
-                  <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-[var(--c-text-dim)]">MAX 10MB</div>
+                <div className="mt-12 flex items-center gap-8">
+                  <div className="px-6 py-3 rounded-xl bg-white/5 border border-white/5 text-[11px] font-black uppercase tracking-widest text-[var(--c-text-dim)] shadow-xl">PNG / JPEG / TIFF</div>
+                  <div className="px-6 py-3 rounded-xl bg-white/5 border border-white/5 text-[11px] font-black uppercase tracking-widest text-[var(--c-text-dim)] shadow-xl">MAX 10MB</div>
                 </div>
               </div>
             )}

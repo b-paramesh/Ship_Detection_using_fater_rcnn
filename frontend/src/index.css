@@ -27,18 +27,18 @@
   --sidebar-collapsed: 0px;
   --topbar-h: 92px; 
   --container-max: 1440px;
-  --section-gap: 80px; 
-  --card-radius: 24px; 
-  --card-padding: 40px; 
+  --section-gap: 100px; 
+  --card-radius: 28px; 
+  --card-padding: 48px; 
 
   /* Spacing Scale */
-  --s-xs: 0.5rem;  /* 8px */
-  --s-sm: 1rem;    /* 16px */
-  --s-md: 1.5rem;  /* 24px */
-  --s-lg: 2rem;    /* 32px */
-  --s-xl: 3rem;    /* 48px */
-  --s-2xl: 4rem;   /* 64px */
-  --s-3xl: 5rem;   /* 80px */
+  --s-xs: 0.75rem;  /* 12px */
+  --s-sm: 1.25rem;  /* 20px */
+  --s-md: 2rem;     /* 32px */
+  --s-lg: 2.5rem;   /* 40px */
+  --s-xl: 3.5rem;   /* 56px */
+  --s-2xl: 4.5rem;  /* 72px */
+  --s-3xl: 6rem;    /* 96px */
 }
 
 /* ── Global Reset ──────────────────────────────────────────────────── */

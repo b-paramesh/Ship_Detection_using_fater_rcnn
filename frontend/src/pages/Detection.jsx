@@ -54,7 +54,17 @@ export default function Detection() {
     setError(null)
     try {
       const res = await detectShips(file, confidence)
-      setResult(res.data)
+      const data = res.data
+      
+      // Fix image URLs to be absolute using VITE_API_URL
+      const baseUrl = import.meta.env.VITE_API_URL || ''
+      const resultData = {
+        ...data,
+        original_image: data.original_image.startsWith('http') ? data.original_image : `${baseUrl}${data.original_image}`,
+        result_image: data.result_image.startsWith('http') ? data.result_image : `${baseUrl}${data.result_image}`
+      }
+      
+      setResult(resultData)
     } catch (err) {
       setError(err.response?.data?.detail || 'Detection failed. Check backend connection.')
     } finally {

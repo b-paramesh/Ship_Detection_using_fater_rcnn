@@ -53,13 +53,14 @@ app.mount("/detection_results", StaticFiles(directory=str(RESULTS_DIR)), name="d
 # ── Lazy-loaded model ────────────────────────────────────────────────────────
 _model = None
 _device = None
+_weights_loaded = False
 
 
 def _load_model():
     """Lazy-load Faster R-CNN model so the server starts fast."""
-    global _model, _device
+    global _model, _device, _weights_loaded
     if _model is not None:
-        return _model, _device
+        return _model, _device, _weights_loaded
 
     import torch
     import torchvision
@@ -72,10 +73,20 @@ def _load_model():
     _model.roi_heads.box_predictor = FastRCNNPredictor(in_features, 2)
 
     if MODEL_PATH.exists():
-        _model.load_state_dict(torch.load(str(MODEL_PATH), map_location=_device))
+        try:
+            _model.load_state_dict(torch.load(str(MODEL_PATH), map_location=_device))
+            _weights_loaded = True
+            print(f"SUCCESS: Model weights loaded from {MODEL_PATH}")
+        except Exception as e:
+            print(f"ERROR: Failed to load model weights: {e}")
+            _weights_loaded = False
+    else:
+        print(f"WARNING: Model weights not found at {MODEL_PATH}. Using random weights.")
+        _weights_loaded = False
+
     _model.to(_device)
     _model.eval()
-    return _model, _device
+    return _model, _device, _weights_loaded
 
 
 # ── Restricted Zones (polygon approximations) ───────────────────────────────
@@ -239,7 +250,7 @@ async def detect_ships(file: UploadFile = File(...), confidence_threshold: float
     h, w = img.shape[:2]
 
     # Run model
-    model, device = _load_model()
+    model, device, loaded = _load_model()
     img_tensor = torch.tensor(img_rgb / 255.0).permute(2, 0, 1).float().to(device)
 
     with torch.no_grad():
@@ -350,6 +361,7 @@ async def detect_ships(file: UploadFile = File(...), confidence_threshold: float
         "ships": ships,
         "collisions": collisions,
         "traffic": traffic,
+        "model_status": "Weights Loaded" if loaded else "Weights NOT Found",
         "summary": {
             "legal": sum(1 for s in ships if s["classification"] == "Legal"),
             "illegal": sum(1 for s in ships if s["classification"] == "Illegal"),

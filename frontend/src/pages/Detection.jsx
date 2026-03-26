@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Upload, Loader2, Crosshair, Eye, Ship, ShieldAlert, AlertTriangle,
@@ -21,10 +21,10 @@ const fadeUp = (d = 0) => ({
   transition: { delay: d, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
 })
 
-export default function Detection() {
-  const [file, setFile] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [result, setResult] = useState(null)
+export default function Detection({ persistentState, setPersistentState }) {
+  const [file, setFile] = useState(persistentState?.file || null)
+  const [preview, setPreview] = useState(persistentState?.preview || null)
+  const [result, setResult] = useState(persistentState?.result || null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [confidence, setConfidence] = useState(0.5)
@@ -32,6 +32,11 @@ export default function Detection() {
   const [dragOver, setDragOver] = useState(false)
   const [model, setModel] = useState('frcnn')
   const inputRef = useRef(null)
+
+  // Sync state to parent on change
+  useEffect(() => {
+    setPersistentState({ file, result, preview })
+  }, [file, result, preview, setPersistentState])
 
   const handleFile = (f) => {
     if (!f || !f.type.startsWith('image/')) return
@@ -56,6 +61,10 @@ export default function Detection() {
       const res = await detectShips(file, confidence)
       const data = res.data
       
+      if (data.model_status === "Weights NOT Found") {
+        setError("Warning: AI Model weights not found on server. Detections will be inaccurate until 'outputs/ship_model.pth' is uploaded to Hugging Face.")
+      }
+
       // Fix image URLs to be absolute using VITE_API_URL
       const baseUrl = import.meta.env.VITE_API_URL || ''
       const resultData = {

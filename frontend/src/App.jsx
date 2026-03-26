@@ -18,6 +18,7 @@ const Reports       = lazy(() => import('./pages/Reports'))
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [detectionState, setDetectionState] = useState({ file: null, result: null, preview: null })
   const location = useLocation()
 
   return (
@@ -34,7 +35,10 @@ export default function App() {
             <AnimatePresence mode="wait">
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/detection" element={<Detection />} />
+                <Route 
+                  path="/detection" 
+                  element={<Detection persistentState={detectionState} setPersistentState={setDetectionState} />} 
+                />
                 <Route path="/traffic" element={<Traffic />} />
                 <Route path="/collisions" element={<Collisions />} />
                 <Route path="/analytics" element={<Analytics />} />
